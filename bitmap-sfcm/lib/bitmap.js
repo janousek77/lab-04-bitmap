@@ -29,14 +29,21 @@ bitmap.Image.prototype.writeToFile = function(file) {
 };
 
 bitmap.Image.prototype.invertImg = function() {
-  for(let i = 0; i < this.pixelArr.length; i += 3) {
-    console.log('before', this.pixelArr[i], this.pixelArr[i+1], this.pixelArr[i+2], '\n');
-    this.pixelArr[i] = parseInt(255, 16) - this.pixelArr[i];
-    this.pixelArr[i+1] = parseInt(255, 16) - this.pixelArr[i+1];
-    this.pixelArr[i+2] = parseInt(255, 16) - this.pixelArr[i+2];
-    // this.pixelArr[i+3] = parseInt(255, 16) - this.pixelArr[i+3];
-    console.log('after', this.pixelArr[i], this.pixelArr[i+1], this.pixelArr[i+2], '\n');
+  console.log(this.buffer.slice(28, 32).readUInt16LE(0));
+  for(let i = 0; i < this.pixelArr.length; i += 2) {
+    let split = this.pixelArr[i].toString().split('');
+    let split2 = this.pixelArr[i+1].toString().split('');
+
+    split[0] = 255 -split[0];
+    split[1] = 255 -split[1];
+    split[2] = 255 -split[2];
+    split2[0] = 255 - split2[0];
+    split2[1] = 255 - split2[1];
+    this.pixelArr[i] = split[0] + split[1] + split[2] + split[3];
+    this.pixelArr[i+1] = split2[0] + split2[1];
+    // console.log('after', this.pixelArr[i], this.pixelArr[i+1], this.pixelArr[i+2], '\n');
   }
+  console.log(this.buffer);
   fs.writeFile("imgs/1invert.bmp", this.buffer, function(err) {
     if(err) {
         return console.log(err);
