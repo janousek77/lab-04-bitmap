@@ -32,6 +32,8 @@ bitmap.Image.prototype.writeToFile = function() {
 };
 
 bitmap.Image.prototype.invertImg = function() {
+  if (!Array.isArray(this.colorTable))
+    throw new Error;
   for(let i = 0; i < this.colorTable.length; i++) {
     this.colorTable[i] = 255 - this.colorTable[i];
   }
@@ -40,6 +42,8 @@ bitmap.Image.prototype.invertImg = function() {
 };
 
 bitmap.Image.prototype.grayImg = function() {
+  if (!Array.isArray(this.colorTable))
+    throw new Error;
   for(let i = 0; i < this.colorTable.length; i+=4) {
     let totalColors = (this.colorTable[i]+this.colorTable[i+1]+this.colorTable[i+2])/3;
     this.colorTable[i] = totalColors;
@@ -51,6 +55,8 @@ bitmap.Image.prototype.grayImg = function() {
 };
 
 bitmap.Image.prototype.rgbImg = function(color) {
+  if (!Array.isArray(this.colorTable))
+    throw new Error;
   let i;
   if (color==='blue')
     i = 0;

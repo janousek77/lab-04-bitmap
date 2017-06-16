@@ -1,6 +1,5 @@
 'use strict';
 
-let fs = require('fs');
 let bitmap = require('./lib/bitmap.js');
 
 let convertImage = (file) => {
