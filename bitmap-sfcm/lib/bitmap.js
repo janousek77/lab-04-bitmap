@@ -8,6 +8,9 @@ function Image(buffer, file) {
   this.buffer = buffer;
   this.fileLocation = file;
   this.colorTable = this.buffer.slice(54, 1078);
+  this.header = this.buffer.slice(0, 2);
+  this.dib = this.buffer.slice(2, 54);
+  this.pixelArr = this.buffer.slice(1066);
 }
 
 bitmap.readFromFile = (file, callback) => {
