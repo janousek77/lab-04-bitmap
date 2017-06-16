@@ -18,25 +18,38 @@ bitmap.readFromFile = (file, callback) => {
   fs.readFile(file, (err, data) => {
     if(err)
       return console.log(err);
-
     callback(data);
   });
 };
 
 bitmap.Image = Image;
 
-bitmap.Image.prototype.writeToFile = (file) => {
+bitmap.Image.prototype.writeToFile = function(file) {
   console.log('write to file');
 };
 
-bitmap.Image.prototype.invertImg = () => {
+bitmap.Image.prototype.invertImg = function() {
+  for(let i = 0; i < this.pixelArr.length; i += 3) {
+    console.log('before', this.pixelArr[i], this.pixelArr[i+1], this.pixelArr[i+2], '\n');
+    this.pixelArr[i] = parseInt(255, 16) - this.pixelArr[i];
+    this.pixelArr[i+1] = parseInt(255, 16) - this.pixelArr[i+1];
+    this.pixelArr[i+2] = parseInt(255, 16) - this.pixelArr[i+2];
+    // this.pixelArr[i+3] = parseInt(255, 16) - this.pixelArr[i+3];
+    console.log('after', this.pixelArr[i], this.pixelArr[i+1], this.pixelArr[i+2], '\n');
+  }
+  fs.writeFile("imgs/1invert.bmp", this.buffer, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+});
+};
+
+bitmap.Image.prototype.grayImg = function() {
 
 };
 
-bitmap.Image.prototype.grayImg = () => {
-
-};
-
-bitmap.Image.prototype.rgbImg = (color) => {
+bitmap.Image.prototype.rgbImg = function(color) {
 
 };
