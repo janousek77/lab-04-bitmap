@@ -7,12 +7,7 @@ let bitmap = module.exports = {};
 function Image(buffer, file) {
   this.buffer = buffer;
   this.fileLocation = file;
-  this.header = this.buffer.slice(0, 2);
-  this.dib = this.buffer.slice(2, 54);
-  this.height = this.buffer.slice(18, 22).readUInt16LE(0);
-  this.width = this.buffer.slice(22, 26).readUInt16LE(0);
   this.colorTable = this.buffer.slice(54, 1078);
-  this.pixelArr = this.buffer.slice(1078, 1078 + this.width * this.height);
 }
 
 bitmap.readFromFile = (file, callback) => {
@@ -37,15 +32,33 @@ bitmap.Image.prototype.invertImg = function() {
   for(let i = 0; i < this.colorTable.length; i++) {
     this.colorTable[i] = 255 - this.colorTable[i];
   }
-  this.writeToFile();
+  if (this.file)
+    this.writeToFile();
 };
 
 bitmap.Image.prototype.grayImg = function() {
-
-  this.writeToFile();
+  for(let i = 0; i < this.colorTable.length; i+=4) {
+    let totalColors = (this.colorTable[i]+this.colorTable[i+1]+this.colorTable[i+2])/3;
+    this.colorTable[i] = totalColors;
+    this.colorTable[i+1] = totalColors;
+    this.colorTable[i+2] = totalColors;
+  }
+  if (this.file)
+    this.writeToFile();
 };
 
 bitmap.Image.prototype.rgbImg = function(color) {
+  let i;
+  if (color==='blue')
+    i = 0;
+  else if (color==='green')
+    i = 1;
+  else if (color==='red')
+    i = 2;
 
-  this.writeToFile();
+  for(i; i < this.colorTable.length; i+=4) {
+    this.colorTable[i] = 255;
+  }
+  if (this.file)
+    this.writeToFile();
 };
